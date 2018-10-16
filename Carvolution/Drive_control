@@ -1,0 +1,69 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public enum DriveControl
+{
+    RearWheelDrive,
+    FrontWheelDrive,
+    AllWheelDrive
+}
+
+public class WheelDrive : MonoBehaviour
+{
+    // maximum steering angle
+    public float maxAngle = 120f;
+    
+    // maximum applied drive torque
+    public float maxTorque = 500f;
+    
+    // maximum applied brake torque
+    public float brakeTorque = 30000f;
+    
+    // vehicle drive control
+    public DriveControl driveControl;
+        
+private WheelCollider[] m_Wheels
+
+    void Start()
+    {
+            m_Wheels = GetComponentsInChildren<WheelCollider>();
+
+            for (int i= 0; i < m_Wheels.Length; ++i)
+            {
+                    var wheel = m_Wheels [i];
+                    
+                    if (wheelShape !=null)
+                    {
+                        var ws = Instantiate (wheelShape);
+                        ws.transform.parent = wheel.transform;
+                    }
+            }
+    }
+    void Update()
+    {
+                m_Wheels[0].ConfigureVehicleSubsteps(criticalSpeed,stepsBelow,stepsAbove);
+        
+                float angle = maxAngle * Input.GetAxis("Horizontal");
+                float torque = maxTorque * Input.GetAxis("Vertical");
+        
+                float handBrake = Input.GetKey(KeyCode.X)?brakeTorque : 0;
+
+                foreach (WheelCollider wheel in m_Wheels)
+                // front wheel steering
+                {
+
+                    if(wheel.transform.localPosition.z > 0)
+                        wheel.steerAngle = angle;
+                    
+                    if(wheel.transform.localPosition.z < 0 && driveControl != DriveControl.FrontWheelDrive)
+                    {
+                                wheel.motorTorque = torque;
+                    }
+                    
+                    if(wheeltransform.localPostion.z < 0 && driveControl != DriveControl.RearWheelDrive)
+                    {
+                                wheel.motorTorque = torque;
+                    }
+                }
+    }
+}
